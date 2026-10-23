@@ -2,19 +2,67 @@
 
 const DELIVERY_FEE = 5000;
 const CART_KEY = "zemon_cart";
+const MAX_CART_ITEMS = 50;
+const MAX_ITEM_QTY = 99;
+const DEFAULT_CART_IMAGE = "assets/images/placeholder-pochette.svg";
+
+function cleanCartText(value, maxLength) {
+  if (typeof value !== "string") return "";
+  return value
+    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function cleanCartImage(value) {
+  if (typeof value !== "string") return DEFAULT_CART_IMAGE;
+  const path = value.replace(/\\/g, "/");
+  return /^assets\/images\/[a-z0-9._-]+\.(?:svg|png|jpe?g|webp|avif)$/i.test(path) ? path : DEFAULT_CART_IMAGE;
+}
+
+function sanitizeCartItem(item) {
+  if (!item || typeof item !== "object") return null;
+  const name = cleanCartText(item.name, 80);
+  if (!name) return null;
+  const price = Number(item.price);
+  const qty = Number(item.qty);
+  return {
+    id: cleanCartText(item.id, 60),
+    name,
+    category: cleanCartText(item.category, 30),
+    currency: item.currency === "usd" ? "usd" : "fc",
+    price: Number.isFinite(price) && price > 0 ? Math.min(price, 100000000) : 0,
+    model: cleanCartText(item.model, 40),
+    variant: cleanCartText(item.variant, 40),
+    qty: Number.isFinite(qty) ? Math.min(MAX_ITEM_QTY, Math.max(1, Math.floor(qty))) : 1,
+    image: cleanCartImage(item.image)
+  };
+}
+
+function sanitizeCart(cart) {
+  if (!Array.isArray(cart)) return [];
+  return cart.map(sanitizeCartItem).filter(Boolean).slice(0, MAX_CART_ITEMS);
+}
 
 function getCart() {
   try {
-    return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    return sanitizeCart(JSON.parse(localStorage.getItem(CART_KEY) || "[]"));
   } catch (e) {
     return [];
   }
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  const clean = sanitizeCart(cart);
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(clean));
+  } catch (e) {
+    void e;
+  }
   updateCartCount();
   renderCart();
+  return clean;
 }
 
 function updateCartCount() {
@@ -57,14 +105,16 @@ function formatFc(val) {
 }
 
 function addItemToCart(item) {
+  const safeItem = sanitizeCartItem(item);
+  if (!safeItem) return;
   const cart = getCart();
   const existing = cart.find(
-    (c) => c.id === item.id && (c.model || "") === (item.model || "") && (c.variant || "") === (item.variant || "")
+    (c) => c.id === safeItem.id && (c.model || "") === (safeItem.model || "") && (c.variant || "") === (safeItem.variant || "")
   );
   if (existing) {
-    existing.qty = (existing.qty || 1) + 1;
+    existing.qty = Math.min(MAX_ITEM_QTY, (existing.qty || 1) + 1);
   } else {
-    cart.push(item);
+    cart.push(safeItem);
   }
   saveCart(cart);
   showCartToast("Ajouté au panier");
@@ -157,7 +207,7 @@ function renderCart() {
     plus.setAttribute("aria-label", "Augmenter");
     plus.addEventListener("click", () => {
       const cartNow = getCart();
-      cartNow[index].qty = (cartNow[index].qty || 1) + 1;
+      cartNow[index].qty = Math.min(MAX_ITEM_QTY, (cartNow[index].qty || 1) + 1);
       saveCart(cartNow);
     });
 

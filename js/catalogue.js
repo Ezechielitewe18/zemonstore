@@ -164,7 +164,7 @@ function readParams() {
 
   if (cat && catSelect) catSelect.value = cat;
   if (model && modelSelect) modelSelect.value = model;
-  if (q && searchInput) searchInput.value = q;
+  if (q && searchInput) searchInput.value = q.slice(0, 60);
 
   if (filter === "best") {
     if (titleEl) titleEl.textContent = "Meilleures ventes";

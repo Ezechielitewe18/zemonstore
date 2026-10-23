@@ -1,5 +1,13 @@
 // ZEMON STORE - Interactions communes
 
+if (window.top !== window.self) {
+  try {
+    window.top.location = window.location.href;
+  } catch (e) {
+    document.documentElement.style.display = "none";
+  }
+}
+
 const yearEl = document.getElementById("year");
 if (yearEl) {
   yearEl.textContent = new Date().getFullYear().toString();
@@ -9,16 +17,24 @@ if (yearEl) {
 const burger = document.getElementById("burger");
 const mobileMenu = document.getElementById("mobileMenu");
 if (burger && mobileMenu) {
-  burger.addEventListener("click", () => mobileMenu.classList.toggle("open"));
+  burger.setAttribute("aria-controls", "mobileMenu");
+  burger.setAttribute("aria-expanded", "false");
+  burger.addEventListener("click", () => {
+    const isOpen = mobileMenu.classList.toggle("open");
+    burger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
 }
 
 /* Barre de recherche */
 const searchToggle = document.getElementById("searchToggle");
 const searchBar = document.getElementById("searchBar");
 if (searchToggle && searchBar) {
+  searchToggle.setAttribute("aria-controls", "searchBar");
+  searchToggle.setAttribute("aria-expanded", "false");
   searchToggle.addEventListener("click", () => {
-    searchBar.classList.toggle("open");
-    if (searchBar.classList.contains("open")) {
+    const isOpen = searchBar.classList.toggle("open");
+    searchToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (isOpen) {
       document.getElementById("headerSearchInput")?.focus();
     }
   });
@@ -28,7 +44,7 @@ const searchForm = document.getElementById("headerSearchForm");
 if (searchForm) {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const q = (document.getElementById("headerSearchInput")?.value || "").trim();
+    const q = (document.getElementById("headerSearchInput")?.value || "").trim().slice(0, 60);
     const inPages = window.location.pathname.replace(/\\/g, "/").includes("/pages/");
     const target = (inPages ? "catalogue.html" : "pages/catalogue.html") + (q ? "?q=" + encodeURIComponent(q) : "");
     window.location.href = target;

@@ -2,7 +2,31 @@
 
 const SHOP_WHATSAPP = "243818395949";
 const SHOP_NAME = "ZEMON STORE";
+const PAYMENT_OPTIONS = ["M-Pesa (Mobile Money)", "Espèces à la livraison"];
 let currentInvoice = null;
+
+function cleanFormText(value, maxLength) {
+  if (typeof value !== "string") return "";
+  return value
+    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function cleanFormPhone(value) {
+  if (typeof value !== "string") return "";
+  return value
+    .replace(/[^\d+\s().-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 20);
+}
+
+function cleanFormEmail(value) {
+  const email = cleanFormText(value, 120).toLowerCase();
+  return /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email) ? email : "";
+}
 
 function checkoutTotals(cart) {
   let subUsd = 0;
@@ -132,7 +156,15 @@ function makeInvoiceNumber() {
   const stamp = now.getFullYear().toString() +
     String(now.getMonth() + 1).padStart(2, "0") +
     String(now.getDate()).padStart(2, "0");
-  return "ZM-" + stamp + "-" + String(Math.floor(100 + Math.random() * 900));
+  let randomPart;
+  if (window.crypto && window.crypto.getRandomValues) {
+    const values = new Uint32Array(1);
+    window.crypto.getRandomValues(values);
+    randomPart = 100 + (values[0] % 900);
+  } else {
+    randomPart = 100 + Math.floor(Math.random() * 900);
+  }
+  return "ZM-" + stamp + "-" + String(randomPart);
 }
 
 function normalizePhone(raw) {
@@ -209,7 +241,7 @@ function renderInvoice(cart, info) {
   document.getElementById("invoiceNum").textContent = "N° " + invoice.number + " · " + invoice.date;
 
   const client = document.getElementById("invoiceClient");
-  client.innerHTML = "";
+  client.replaceChildren();
   const clientLines = [invoice.name, invoice.phone, invoice.address, invoice.email, invoice.payment ? "Paiement : " + invoice.payment : ""];
   clientLines.filter(Boolean).forEach((line) => {
     const p = document.createElement("p");
@@ -218,7 +250,7 @@ function renderInvoice(cart, info) {
   });
 
   const itemsEl = document.getElementById("invoiceItems");
-  itemsEl.innerHTML = "";
+  itemsEl.replaceChildren();
   cart.forEach((item) => {
     const row = document.createElement("div");
     row.className = "summary-item";
@@ -247,11 +279,42 @@ function renderInvoice(cart, info) {
   });
 
   const totalsEl = document.getElementById("invoiceTotals");
-  totalsEl.innerHTML = `
-    <div class="total-line"><span>Sous-total</span><div class="total-split"><span>${invoice.totals.subUsdText}</span><span>${invoice.totals.subFcText}</span></div></div>
-    <div class="total-line"><span>Livraison (Kinshasa)</span><span>${formatFc(DELIVERY_FEE)}</span></div>
-    <div class="total-line total-line--grand"><span>Total</span><div class="total-split"><span>${invoice.totals.totalUsdText}</span><span>${invoice.totals.totalFcText}</span></div></div>
-  `;
+
+  const subtotalLine = document.createElement("div");
+  subtotalLine.className = "total-line";
+  const subtotalLabel = document.createElement("span");
+  subtotalLabel.textContent = "Sous-total";
+  const subtotalSplit = document.createElement("div");
+  subtotalSplit.className = "total-split";
+  const subtotalUsd = document.createElement("span");
+  subtotalUsd.textContent = invoice.totals.subUsdText;
+  const subtotalFc = document.createElement("span");
+  subtotalFc.textContent = invoice.totals.subFcText;
+  subtotalSplit.append(subtotalUsd, subtotalFc);
+  subtotalLine.append(subtotalLabel, subtotalSplit);
+
+  const deliveryLine = document.createElement("div");
+  deliveryLine.className = "total-line";
+  const deliveryLabel = document.createElement("span");
+  deliveryLabel.textContent = "Livraison (Kinshasa)";
+  const deliveryValue = document.createElement("span");
+  deliveryValue.textContent = formatFc(DELIVERY_FEE);
+  deliveryLine.append(deliveryLabel, deliveryValue);
+
+  const grandLine = document.createElement("div");
+  grandLine.className = "total-line total-line--grand";
+  const grandLabel = document.createElement("span");
+  grandLabel.textContent = "Total";
+  const grandSplit = document.createElement("div");
+  grandSplit.className = "total-split";
+  const grandUsd = document.createElement("span");
+  grandUsd.textContent = invoice.totals.totalUsdText;
+  const grandFc = document.createElement("span");
+  grandFc.textContent = invoice.totals.totalFcText;
+  grandSplit.append(grandUsd, grandFc);
+  grandLine.append(grandLabel, grandSplit);
+
+  totalsEl.replaceChildren(subtotalLine, deliveryLine, grandLine);
 
   const waBtn = document.getElementById("invoiceWa");
   const clientPhone = normalizePhone(invoice.phone);
@@ -278,12 +341,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const rawEmail = document.getElementById("clientEmail").value;
+    const phone = cleanFormPhone(document.getElementById("clientPhone").value);
+    const email = cleanFormEmail(rawEmail);
+    const paymentValue = document.getElementById("clientPayment")?.value;
     const info = {
-      name: document.getElementById("clientName").value.trim(),
-      phone: document.getElementById("clientPhone").value.trim(),
-      address: document.getElementById("clientAddress").value.trim(),
-      email: document.getElementById("clientEmail").value.trim(),
-      payment: document.getElementById("clientPayment")?.value || "M-Pesa (Mobile Money)"
+      name: cleanFormText(document.getElementById("clientName").value, 80),
+      phone,
+      address: cleanFormText(document.getElementById("clientAddress").value, 160),
+      email,
+      payment: PAYMENT_OPTIONS.includes(paymentValue) ? paymentValue : PAYMENT_OPTIONS[0]
     };
 
     if (!info.name || !info.phone || !info.address) {
@@ -291,8 +358,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const phoneDigits = normalizePhone(info.phone);
+    if (phoneDigits.length < 9 || phoneDigits.length > 15) {
+      alert("Numéro WhatsApp invalide. Exemple : 081 234 5678.");
+      return;
+    }
+
+    if (rawEmail.trim() && !email) {
+      alert("Adresse email invalide.");
+      return;
+    }
+
     const orderUrl = "https://wa.me/" + SHOP_WHATSAPP + "?text=" + buildOrderMessage(cart, info);
-    window.open(orderUrl, "_blank");
+    window.open(orderUrl, "_blank", "noopener,noreferrer");
 
     renderInvoice(cart, info);
 
@@ -317,12 +395,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("invoiceMail")?.addEventListener("click", () => {
     if (!currentInvoice) return;
-    if (!currentInvoice.email) {
-      alert("Ajoutez votre email dans le formulaire, puis recliquez sur ce bouton.");
+    const email = cleanFormEmail(currentInvoice.email);
+    if (!email) {
+      alert("Ajoutez un email valide dans le formulaire, puis recliquez sur ce bouton.");
       return;
     }
     const subject = encodeURIComponent("Facture " + currentInvoice.number + " - " + SHOP_NAME);
     const body = encodeURIComponent(buildInvoiceText(currentInvoice).replace(/\*/g, ""));
-    window.location.href = "mailto:" + currentInvoice.email + "?subject=" + subject + "&body=" + body;
+    window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + body;
   });
 });
