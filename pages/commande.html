@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZEMON STORE | Commande</title>
+  <meta name="description" content="Validez votre commande ZEMON STORE. Livraison à Kinshasa, commande par WhatsApp.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html">
+        <span class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.8"/><path d="M13.2 6.5 10.2 12h2.4L11 17"/></svg>
+        </span>
+        <span class="brand-name">ZEMON <span>STORE</span></span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="catalogue.html">Boutique</a>
+        <a href="catalogue.html?filter=best">Meilleures ventes</a>
+        <a href="contact.html#apropos">À propos</a>
+        <a href="contact.html#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="searchToggle" aria-label="Rechercher">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        </button>
+        <button class="icon-btn cart-btn" aria-label="Panier">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <span class="cart-count">0</span>
+        </button>
+        <button class="icon-btn burger" id="burger" aria-label="Ouvrir le menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-bar" id="searchBar">
+      <form id="headerSearchForm">
+        <input type="search" id="headerSearchInput" placeholder="Rechercher une pochette, un chargeur, un verre..." aria-label="Rechercher">
+        <button class="btn btn-sm" type="submit">Chercher</button>
+      </form>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <nav class="mobile-nav">
+        <a href="catalogue.html">Boutique</a>
+        <a href="catalogue.html?filter=best">Meilleures ventes</a>
+        <a href="contact.html#apropos">À propos</a>
+        <a href="contact.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="container">
+        <p class="breadcrumb"><a href="../index.html">Accueil</a> / Commande</p>
+        <h1>Finaliser la commande</h1>
+        <p>Remplissez vos informations, puis envoyez votre commande sur WhatsApp.</p>
+      </div>
+    </section>
+
+    <section class="checkout">
+      <div class="container">
+        <div class="checkout-grid">
+          <div class="panel">
+            <h2 class="panel-title">Vos informations</h2>
+            <form id="checkoutForm">
+              <div class="form-group">
+                <label for="clientName">Nom complet</label>
+                <input type="text" id="clientName" placeholder="Votre nom" required>
+              </div>
+
+              <div class="form-group">
+                <label for="clientPhone">Numéro WhatsApp</label>
+                <input type="tel" id="clientPhone" placeholder="Ex : 081 234 5678" required>
+              </div>
+
+              <div class="form-group">
+                <label for="clientAddress">Quartier / Adresse</label>
+                <input type="text" id="clientAddress" placeholder="Ex : Gombe, avenue..." required>
+              </div>
+
+              <div class="form-group">
+                <label for="clientEmail">Email (optionnel, pour la facture)</label>
+                <input type="email" id="clientEmail" placeholder="vous@email.com">
+              </div>
+
+              <div class="form-group">
+                <label for="clientPayment">Mode de paiement</label>
+                <select id="clientPayment">
+                  <option value="M-Pesa (Mobile Money)">M-Pesa (Mobile Money)</option>
+                  <option value="Espèces à la livraison">Espèces à la livraison</option>
+                </select>
+              </div>
+
+              <div class="payment-box">
+                <span class="payment-ico">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1.3" fill="currentColor" stroke="none"/></svg>
+                </span>
+                <div>
+                  <strong>Paiement M-Pesa</strong>
+                  <p>Après confirmation, envoyez le montant au +243 818 395 949 (Mobile Money). Paiement en espèces aussi accepté à la livraison.</p>
+                </div>
+              </div>
+
+              <p class="form-note" style="margin-top:1rem;">Livraison uniquement à Kinshasa : 5 000 FC. Nous vous contactons sur WhatsApp pour confirmer, 24h/24 et 7j/7.</p>
+
+              <button class="btn btn-block" type="submit">Envoyer la commande sur WhatsApp</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h2 class="panel-title">Récapitulatif</h2>
+            <div class="summary-items" id="checkoutItems"></div>
+            <div class="totals">
+              <div class="total-line">
+                <span>Sous-total</span>
+                <div class="total-split">
+                  <span id="checkoutSubtotalUsd">$ 0.00</span>
+                  <span id="checkoutSubtotalFc">0 FC</span>
+                </div>
+              </div>
+              <div class="total-line">
+                <span>Livraison (Kinshasa)</span>
+                <span>5 000 FC</span>
+              </div>
+              <div class="total-line total-line--grand">
+                <span>Total</span>
+                <div class="total-split">
+                  <span id="checkoutTotalUsd">$ 0.00</span>
+                  <span id="checkoutTotalFc">0 FC</span>
+                </div>
+              </div>
+            </div>
+            <a class="btn btn-outline btn-block" href="catalogue.html" style="margin-top:1rem;">Continuer mes achats</a>
+          </div>
+        </div>
+
+        <section class="invoice" id="invoicePanel">
+          <div class="invoice-head">
+            <div>
+              <h2 class="invoice-title">Facture ZEMON STORE</h2>
+              <p class="invoice-num" id="invoiceNum"></p>
+            </div>
+            <div class="invoice-client" id="invoiceClient"></div>
+          </div>
+
+          <div class="summary-items" id="invoiceItems"></div>
+
+          <div class="totals" id="invoiceTotals"></div>
+
+          <div class="invoice-actions">
+            <button class="btn" type="button" id="invoicePdf">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+              Télécharger la facture PDF
+            </button>
+            <a class="btn btn-outline" id="invoiceWa" href="#">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.02A9.82 9.82 0 0 0 12.04 2Zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23a8.2 8.2 0 0 1 8.23 8.24c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
+              Recevoir sur WhatsApp
+            </a>
+            <button class="btn btn-outline" type="button" id="invoiceMail">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              Recevoir par email
+            </button>
+            <button class="btn btn-outline" type="button" id="invoicePrint">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 17h12v4H6z"/></svg>
+              Imprimer
+            </button>
+          </div>
+          <p class="form-note" style="margin-top:0.9rem;">La facture PDF est générée automatiquement avec votre mode de paiement (M-Pesa ou espèces) et le numéro Mobile Money.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../index.html">
+            <span class="brand-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.8"/><path d="M13.2 6.5 10.2 12h2.4L11 17"/></svg>
+            </span>
+            <span class="brand-name">ZEMON <span>STORE</span></span>
+          </a>
+          <p>Accessoires iPhone Premium. Livraison à Kinshasa.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Liens rapides</h4>
+          <div class="footer-links">
+            <a href="catalogue.html">Boutique</a>
+            <a href="catalogue.html?filter=best">Meilleures ventes</a>
+            <a href="contact.html#apropos">À propos</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Service client</h4>
+          <div class="footer-links">
+            <a href="contact.html">Comment commander</a>
+            <a href="contact.html">Livraison : 5 000 FC à Kinshasa</a>
+            <a href="contact.html">Paiement M-Pesa ou à la livraison</a>
+            <a href="contact.html">Assistance 24h/24, 7j/7</a>
+            <a href="contact.html#contact">Contact</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Suivez-nous</h4>
+          <div class="socials">
+            <a href="https://wa.me/243818395949" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.02A9.82 9.82 0 0 0 12.04 2Zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23a8.2 8.2 0 0 1 8.23 8.24c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; <span id="year"></span> ZEMON STORE. Tous droits réservés.</div>
+    </div>
+  </footer>
+
+  <div class="cart-toast" id="cartToast">Ajouté au panier</div>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Panier">
+    <div class="cart-drawer-header">
+      <h2 class="cart-drawer-title">Mon panier</h2>
+      <button class="cart-close" id="cartClose" aria-label="Fermer le panier">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cart-drawer-body" id="cartItems"></div>
+    <div class="cart-drawer-footer">
+      <div class="cart-totals">
+        <div class="cart-total-line">
+          <span>Sous-total</span>
+          <div class="cart-total-split">
+            <span id="subtotalUsd">$ 0.00</span>
+            <span id="subtotalFc">0 FC</span>
+          </div>
+        </div>
+        <div class="cart-total-line">
+          <span>Livraison (Kinshasa)</span>
+          <span>5 000 FC</span>
+        </div>
+        <div class="cart-total-line cart-total-line--grand">
+          <span>Total</span>
+          <div class="cart-total-split">
+            <span id="totalUsd">$ 0.00</span>
+            <span id="totalFc">0 FC</span>
+          </div>
+        </div>
+      </div>
+      <a class="btn btn-block" href="commande.html">Commander</a>
+      <button class="cart-clear" id="cartClear">Vider le panier</button>
+    </div>
+  </aside>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/invoice-pdf.js"></script>
+  <script src="../js/commande.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+
+</html>
